@@ -1,30 +1,36 @@
 import { useState } from 'react';
-import { VStack, HStack, IconButton, useTheme, Text, Heading } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { VStack, HStack, IconButton, useTheme, Text, Heading, FlatList, Center } from 'native-base';
 import { SignOut } from 'phosphor-react-native';
+import {ChatTeardropText} from 'phosphor-react-native'
 
 import {Filter} from '../components/Filter'
+import { Button } from '../components/Button';
+import { Order, OrderProps } from '../components/Order';
+
 import Logo from "../assets/logo_secondary.svg"
+import sizes from 'native-base/lib/typescript/theme/base/sizes';
 
 export function Home() {
-  const [orders, setOrders] = useState([{
-
-    
-
-
-  }])
+  const [orders, setOrders] = useState<OrderProps[]> ([])
 
 
   const [statusSelected, setStatusSelected] = useState<'open' | 'close'>('open')
+
+  const navigation = useNavigation()
   const {colors} = useTheme()
 
+  function handleNewOrder(){
+    navigation.navigate('new')
+  }
 
   return (
     <VStack flex={1} pb={6} bg='gray.700'>
       <HStack
-      w='full'
-      justifyContent='space-between'
-      alignItems='center'
-      bg='gray.600'
+      w="full"
+      justifyContent="space-between"
+      alignItems="center"
+      bg="gray.600"
       pt={12}
       pb={5}
       px={6}
@@ -38,7 +44,9 @@ export function Home() {
             Meus chamados 
           </Heading>
 
-         <Text color='gray.200'> 5 </Text>
+         <Text color='gray.200'> 
+         ? 
+         </Text>
         </HStack>
 
         <HStack space={3} mb={8}>
@@ -58,8 +66,26 @@ export function Home() {
           
         </HStack>
 
+        <FlatList 
+          data={orders} 
+          keyExtractor= {item => item.id}
+          renderItem={({item}) => <Order  data={item} />}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 100}}
+          ListEmptyComponent={() => (
+            <Center>
+              <ChatTeardropText color={colors.gray[300] } size={40}   />
+              <Text color='gray.300' fontSize='xl' mt={6} textAlign='center'>
+                Você ainda não possui {'\n'} 
+                solicitações {statusSelected === 'open'  ?  'em aberto' : 'finalizados'}
+              </Text>
+            </Center>
+          )}
+        />
+        
+        <Button  title="Nova Solicitação" onPress={handleNewOrder} />
 
       </VStack>
     </VStack>
-  );
+  )
 }
