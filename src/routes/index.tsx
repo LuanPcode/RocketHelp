@@ -7,7 +7,7 @@ import { AppRoutes } from "./apo.routes";
 export function Routes(){
     return(
         <NavigationContainer>
-            <AppRoutes />
+            <Signin />
         </NavigationContainer>
     )
 }

@@ -12,16 +12,24 @@ import Logo from "../assets/logo_secondary.svg"
 import sizes from 'native-base/lib/typescript/theme/base/sizes';
 
 export function Home() {
-  const [orders, setOrders] = useState<OrderProps[]> ([])
-
-
+  const [orders, setOrders] = useState<OrderProps[]> ([
+    {
+    id: '1',
+    patrimony:'12',
+    when: 'gchdsgcfsjdchghsdcdbas',
+    status: 'open',
+    }
+  ])
   const [statusSelected, setStatusSelected] = useState<'open' | 'close'>('open')
-
   const navigation = useNavigation()
   const {colors} = useTheme()
 
   function handleNewOrder(){
     navigation.navigate('new')
+  }
+
+  function handleOpenDetails(orderId: string){
+    navigation.navigate('details', {orderId})
   }
 
   return (
@@ -45,7 +53,7 @@ export function Home() {
           </Heading>
 
          <Text color='gray.200'> 
-         ? 
+            {orders.length}
          </Text>
         </HStack>
 
@@ -69,7 +77,7 @@ export function Home() {
         <FlatList 
           data={orders} 
           keyExtractor= {item => item.id}
-          renderItem={({item}) => <Order  data={item} />}
+          renderItem={({item}) => <Order  data={item} onPress={() => handleOpenDetails(item.id)} />}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 100}}
           ListEmptyComponent={() => (
